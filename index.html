@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My 2KM Food Directory — Pasir Ris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     1. THEME VARIABLES
+     ============================================================ */
+  :root{
+    --primary-blue:#1F8FD6;
+    --dark-blue:#0B4C78;
+    --pocket-blue:#EAF6FF;
+    --accent-red:#EF4A46;
+    --accent-yellow:#FFC53D;
+    --background:#F7FAFC;
+    --card-background:#FFFFFF;
+    --text:#0F2A3D;
+    --muted-text:#5A7080;
+    --border-soft:#E1EEF6;
+    --radius-lg:22px;
+    --radius-md:14px;
+    --radius-sm:9px;
+    --shadow-card:0 10px 24px -12px rgba(11,76,120,0.25);
+    --shadow-card-hover:0 16px 32px -12px rgba(11,76,120,0.35);
+    --font-display:'Baloo 2', 'Nunito Sans', sans-serif;
+    --font-body:'Nunito Sans', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    background:var(--background);
+    color:var(--text);
+    line-height:1.5;
+  }
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;}
+  a{color:inherit;}
+
+  /* Focus visibility for accessibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
+    outline:3px solid var(--accent-yellow);
+    outline-offset:2px;
+  }
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+
+  /* ============================================================
+     2. HEADER
+     ============================================================ */
+  header.site-header{
+    background:linear-gradient(160deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+    color:#fff;
+    padding:34px 0 90px;
+    position:relative;
+    overflow:hidden;
+  }
+  .header-decor{
+    position:absolute;
+    top:-70px; right:-60px;
+    width:230px;height:230px;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0.05) 60%);
+    border:3px dashed rgba(255,255,255,0.35);
+  }
+  .header-decor::after{
+    content:"";
+    position:absolute;
+    top:50%; left:50%;
+    width:64px;height:64px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:var(--accent-yellow);
+    box-shadow:0 0 0 8px rgba(255,255,255,0.18);
+  }
+  .header-content{position:relative;z-index:1;max-width:640px;}
+  .eyebrow-pin{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,0.16);
+    padding:6px 14px;border-radius:999px;
+    font-size:0.85rem;font-weight:700;
+    margin-bottom:14px;
+  }
+  h1.app-title{
+    font-family:var(--font-display);
+    font-size:clamp(1.9rem, 4vw, 2.7rem);
+    margin:0 0 8px;
+    font-weight:800;
+    letter-spacing:0.2px;
+  }
+  p.app-subtitle{
+    font-size:1.05rem;
+    margin:0 0 4px;
+    color:rgba(255,255,255,0.92);
+  }
+  p.app-tagline{
+    font-size:0.92rem;
+    margin:0;
+    color:rgba(255,255,255,0.75);
+  }
+
+  /* ============================================================
+     3. SEARCH (overlaps header bottom edge)
+     ============================================================ */
+  .search-float{
+    max-width:1180px;
+    margin:-58px auto 0;
+    padding:0 20px;
+    position:relative;
+    z-index:2;
+  }
+  .search-box{
+    background:var(--card-background);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
+    padding:18px 20px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    border:1px solid var(--border-soft);
+  }
+  .search-box svg{flex-shrink:0;color:var(--primary-blue);}
+  .search-box input{
+    flex:1;
+    border:none;
+    outline:none;
+    font-size:1rem;
+    font-family:inherit;
+    color:var(--text);
+    background:transparent;
+  }
+  .search-box input::placeholder{color:var(--muted-text);}
+
+  /* ============================================================
+     Sections generic
+     ============================================================ */
+  main{padding-bottom:60px;}
+  section{margin-top:34px;}
+  h2.section-title{
+    font-family:var(--font-display);
+    font-size:1.35rem;
+    color:var(--dark-blue);
+    margin:0 0 14px;
+    font-weight:700;
+    display:flex;align-items:center;gap:8px;
+  }
+
+  /* ============================================================
+     19. SUMMARY DASHBOARD
+     ============================================================ */
+  .dashboard{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+  }
+  .stat-card{
+    background:var(--card-background);
+    border-radius:var(--radius-md);
+    padding:16px 18px;
+    box-shadow:var(--shadow-card);
+    border-bottom:4px solid var(--primary-blue);
+  }
+  .stat-card:nth-child(2){border-bottom-color:var(--accent-red);}
+  .stat-card:nth-child(3){border-bottom-color:var(--accent-yellow);}
+  .stat-card:nth-child(4){border-bottom-color:var(--dark-blue);}
+  .stat-value{
+    font-family:var(--font-display);
+    font-size:1.7rem;
+    font-weight:700;
+    color:var(--dark-blue);
+  }
+  .stat-label{
+    font-size:0.82rem;
+    color:var(--muted-text);
+    font-weight:600;
+    margin-top:2px;
+  }
+
+  /* ============================================================
+     21. MAP OVERVIEW
+     ============================================================ */
+  .map-panel{
+    background:var(--card-background);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
+    padding:22px;
+    display:flex;
+    gap:22px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .map-placeholder{
+    flex:1 1 260px;
+    min-height:170px;
+    border-radius:var(--radius-md);
+    background:
+      repeating-linear-gradient(45deg, var(--pocket-blue) 0 10px, #ffffff 10px 20px);
+    border:2px dashed var(--primary-blue);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:var(--dark-blue);
+    padding:20px;
+  }
+  .map-placeholder strong{font-family:var(--font-display);font-size:1.05rem;}
+  .map-placeholder span{font-size:0.85rem;color:var(--muted-text);margin-top:4px;}
+  .map-info{flex:1 1 220px;}
+  .map-info p{color:var(--muted-text);font-size:0.92rem;margin:6px 0 16px;}
+  .btn-primary{
+    background:var(--primary-blue);
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.92rem;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 18px -6px rgba(31,143,214,0.55);}
+
+  /* ============================================================
+     18. QUICK FILTER CHIPS
+     ============================================================ */
+  .quick-filters{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    background:#fff;
+    border:2px solid var(--border-soft);
+    color:var(--dark-blue);
+    padding:8px 16px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.85rem;
+    transition:all 0.15s ease;
+  }
+  .chip:hover{border-color:var(--primary-blue);}
+  .chip.active{
+    background:var(--primary-blue);
+    border-color:var(--primary-blue);
+    color:#fff;
+  }
+  .chip[disabled]{opacity:0.45;cursor:not-allowed;}
+  .chip[disabled]:hover{border-color:var(--border-soft);}
+
+  /* ============================================================
+     5. FILTER SYSTEM
+     ============================================================ */
+  .filter-panel{
+    background:var(--card-background);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
+    padding:22px;
+  }
+  .filter-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+  .filter-group label.group-label{
+    display:block;
+    font-weight:700;
+    font-size:0.85rem;
+    color:var(--dark-blue);
+    margin-bottom:8px;
+  }
+  .filter-group select{
+    width:100%;
+    padding:10px 12px;
+    border-radius:var(--radius-sm);
+    border:2px solid var(--border-soft);
+    background:#fff;
+    font-family:inherit;
+    font-size:0.92rem;
+    color:var(--text);
+  }
+  .filter-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:18px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .result-counter{font-weight:700;color:var(--dark-blue);font-size:0.95rem;}
+  .btn-reset{
+    background:var(--accent-red);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.85rem;
+  }
+  .btn-reset:hover{filter:brightness(1.05);}
+
+  .sort-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:16px;
+  }
+  .sort-row label{font-weight:700;font-size:0.85rem;color:var(--dark-blue);margin-right:8px;align-self:center;}
+  .sort-row select{
+    padding:9px 12px;
+    border-radius:var(--radius-sm);
+    border:2px solid var(--border-soft);
+    font-family:inherit;
+    background:#fff;
+  }
+
+  /* ============================================================
+     7 & 17. RESTAURANT CARDS
+     ============================================================ */
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    margin-top:20px;
+  }
+  .r-card{
+    background:var(--card-background);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    box-shadow:var(--shadow-card);
+    display:flex;
+    flex-direction:column;
+    transition:transform 0.18s ease, box-shadow 0.18s ease;
+    border:1px solid var(--border-soft);
+  }
+  .r-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-card-hover);}
+
+  .r-image{
+    height:130px;
+    background:linear-gradient(135deg, var(--pocket-blue), #fff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.6rem;
+    position:relative;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .r-image .budget-pill{
+    position:absolute;
+    top:10px; right:10px;
+    background:var(--accent-yellow);
+    color:var(--dark-blue);
+    font-weight:800;
+    font-size:0.78rem;
+    padding:4px 10px;
+    border-radius:999px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.12);
+  }
+  .r-image .dist-pill{
+    position:absolute;
+    top:10px; left:10px;
+    background:rgba(11,76,120,0.85);
+    color:#fff;
+    font-weight:700;
+    font-size:0.78rem;
+    padding:4px 10px;
+    border-radius:999px;
+  }
+
+  .r-body{padding:16px 16px 8px;flex:1;display:flex;flex-direction:column;}
+  .r-name{
+    font-family:var(--font-display);
+    font-size:1.08rem;
+    font-weight:700;
+    color:var(--dark-blue);
+    margin:0 0 4px;
+  }
+  .r-cuisine{font-size:0.85rem;color:var(--muted-text);margin:0 0 8px;font-weight:600;}
+  .r-address{font-size:0.8rem;color:var(--muted-text);margin:0 0 8px;}
+  .r-desc{font-size:0.85rem;color:var(--text);margin:0 0 10px;flex:1;}
+  .r-meta-row{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:0.85rem;margin-bottom:6px;
+  }
+  .r-rating{font-weight:700;color:var(--dark-blue);}
+  .r-rating.unavailable{color:var(--muted-text);font-weight:600;font-style:italic;}
+  .r-hours{font-size:0.76rem;color:var(--muted-text);margin-bottom:10px;}
+
+  .r-buttons{
+    padding:0 16px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .r-buttons .row-two{display:flex;gap:8px;}
+  .btn-action{
+    flex:1;
+    text-align:center;
+    padding:10px 8px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.82rem;
+    border:none;
+    text-decoration:none;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .btn-map{background:var(--primary-blue);color:#fff;}
+  .btn-map:hover{filter:brightness(1.08);}
+  .btn-grab{background:#00B14F;color:#fff;}
+  .btn-panda{background:var(--accent-red);color:#fff;}
+  .btn-action.unavailable{
+    background:#EEF2F5;
+    color:var(--muted-text);
+    cursor:not-allowed;
+    font-size:0.74rem;
+  }
+
+  /* ============================================================
+     15. EMPTY RESULTS
+     ============================================================ */
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    background:var(--card-background);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
+  }
+  .empty-state .emoji{font-size:2.6rem;margin-bottom:10px;}
+  .empty-state h3{font-family:var(--font-display);color:var(--dark-blue);margin:0 0 6px;}
+  .empty-state p{color:var(--muted-text);margin:0 0 18px;}
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer{
+    background:var(--dark-blue);
+    color:rgba(255,255,255,0.85);
+    padding:26px 0;
+    margin-top:50px;
+    font-size:0.85rem;
+    text-align:center;
+  }
+  footer .foot-note{opacity:0.7;font-size:0.78rem;margin-top:6px;max-width:520px;margin-left:auto;margin-right:auto;}
+
+  .dev-comment{
+    max-width:1180px;margin:24px auto 0;padding:0 20px;
+    font-size:0.78rem;color:var(--muted-text);
+  }
+
+  /* ============================================================
+     16. RESPONSIVE
+     ============================================================ */
+  @media (max-width:980px){
+    .filter-grid{grid-template-columns:repeat(2,1fr);}
+    .card-grid{grid-template-columns:repeat(2,1fr);}
+    .dashboard{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:640px){
+    header.site-header{padding:26px 0 80px;}
+    .filter-grid{grid-template-columns:1fr;}
+    .card-grid{grid-template-columns:1fr;}
+    .dashboard{grid-template-columns:repeat(2,1fr);}
+    .search-box{padding:14px 16px;}
+    .map-panel{flex-direction:column;align-items:stretch;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-decor" aria-hidden="true"></div>
+  <div class="wrap header-content">
+    <span class="eyebrow-pin">📍 26 Pasir Ris Link</span>
+    <h1 class="app-title">🍽️ My 2KM Food Directory</h1>
+    <p class="app-subtitle">Your neighbourhood food guide around 26 Pasir Ris Link</p>
+    <p class="app-tagline">Find something delicious nearby.</p>
+  </div>
+</header>
+
+<div class="search-float">
+  <div class="search-box">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" type="text" placeholder="🔎 Search for a food place, cuisine or dish..." aria-label="Search for a food place, cuisine or dish">
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section aria-labelledby="dashboard-title">
+    <h2 class="section-title" id="dashboard-title">Neighbourhood snapshot</h2>
+    <div class="dashboard">
+      <div class="stat-card">
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Food Places</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statWithin1km">0</div>
+        <div class="stat-label">Within 1 KM</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statWithin2km">0</div>
+        <div class="stat-label">Within 2 KM</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statAvgRating">0.0</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="map-title">
+    <h2 class="section-title" id="map-title">🗺️ Explore Nearby</h2>
+    <div class="map-panel">
+      <div class="map-placeholder">
+        <strong>Interactive map</strong>
+        <span>Connect Google Maps / Maps API here</span>
+      </div>
+      <div class="map-info">
+        <p>See every food place on this page laid out around 26 Pasir Ris Link — open the live map to explore the area yourself.</p>
+        <a class="btn-primary" id="openMapsBtn" href="#" target="_blank" rel="noopener">🗺️ Open Google Maps</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="quick-title">
+    <h2 class="section-title" id="quick-title">Quick filters</h2>
+    <div class="quick-filters" id="quickFilters">
+      <button class="chip active" data-quick="all">All</button>
+      <button class="chip" data-quick="under10">Under $10</button>
+      <button class="chip" data-quick="under20">Under $20</button>
+      <button class="chip" data-quick="highrated">Highly Rated</button>
+      <button class="chip" data-quick="within1km">Within 1KM</button>
+      <button class="chip" data-quick="opennow" disabled title="Opening-hours data isn't reliable enough to calculate this yet">Open Now</button>
+    </div>
+  </section>
+
+  <section aria-labelledby="filter-title">
+    <h2 class="section-title" id="filter-title">Filter results</h2>
+    <div class="filter-panel">
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label class="group-label" for="budgetFilter">Budget</label>
+          <select id="budgetFilter">
+            <option value="any">Any budget</option>
+            <option value="$">$ — Budget</option>
+            <option value="$$">$$ — Moderate</option>
+            <option value="$$$">$$$ — Expensive</option>
+            <option value="$$$$">$$$$ — Premium</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="group-label" for="distanceFilter">Distance</label>
+          <select id="distanceFilter">
+            <option value="2000">Within 2km</option>
+            <option value="500">Within 500m</option>
+            <option value="1000">Within 1km</option>
+            <option value="1500">Within 1.5km</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="group-label" for="typeFilter">Food type</label>
+          <select id="typeFilter">
+            <option value="any">All types</option>
+            <option value="Hawker">Hawker</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Malay">Malay</option>
+            <option value="Indian">Indian</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Korean">Korean</option>
+            <option value="Western">Western</option>
+            <option value="Cafe">Cafe</option>
+            <option value="Fast Food">Fast Food</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Drinks">Drinks</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="group-label" for="ratingFilter">Rating</label>
+          <select id="ratingFilter">
+            <option value="0">Any rating</option>
+            <option value="3.0">3.0+</option>
+            <option value="3.5">3.5+</option>
+            <option value="4.0">4.0+</option>
+            <option value="4.5">4.5+</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-footer">
+        <span class="result-counter" id="resultCounter">Showing 0 food places</span>
+        <button class="btn-reset" id="resetBtn">Reset Filters</button>
+      </div>
+      <div class="sort-row">
+        <label for="sortSelect">Sort by</label>
+        <select id="sortSelect">
+          <option value="nearest">Nearest</option>
+          <option value="rating">Highest Rated</option>
+          <option value="priceLow">Lowest Budget</option>
+          <option value="priceHigh">Highest Budget</option>
+          <option value="az">A–Z</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="results-title">
+    <h2 class="section-title" id="results-title" style="position:absolute;left:-9999px;">Results</h2>
+    <div class="card-grid" id="cardGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="emoji">😢</div>
+      <h3>No food places found.</h3>
+      <p>Try changing your filters or increasing the distance.</p>
+      <button class="btn-reset" id="resetBtn2">Reset Filters</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="dev-comment">
+  <!-- Developer note: real restaurant listings retrieved via a places lookup for the area around
+       26 Pasir Ris Link (names, addresses, coordinates and ratings are real; GrabFood and foodpanda
+       deep links were not available from that source and are intentionally left unset — see notes
+       below the app for how to wire up real ordering links and a live map API. -->
+</div>
+
+<footer>
+  <div class="wrap">
+    <div>Made for exploring food around the neighbourhood 🍜</div>
+    <div>Starting point: 26 Pasir Ris Link</div>
+    <div class="foot-note">Restaurant information, ratings, prices and availability should be verified with the respective platforms.</div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   3. RESTAURANT DATA
+   Real establishments near 26 Pasir Ris Link, Singapore, retrieved
+   from a places lookup (name, address, coordinates, rating are real).
+   GrabFood/foodpanda links were not available from that source, so
+   they are left null on purpose — see grabFoodUrl / foodpandaUrl below.
+   ============================================================ */
+const HOME = { lat: 1.3774697, lng: 103.9598895, label: "26 Pasir Ris Link, Singapore" };
+
+const restaurants = [
+  { name:"Pasir Ris Central Hawker Centre", category:"Hawker", cuisine:"Hawker • Local mixed dishes", address:"110 Pasir Ris Central, Singapore 519641", latitude:1.373373, longitude:103.9516601, budget:"$", rating:4.1, ratingCount:2156, ratingSource:"Google", description:"A breezy hawker centre facing Pasir Ris Town Park, with stalls spanning local rice, noodle and grilled dishes.", image:"🍲", googleMapsPlaceId:"ChIJ1Y5ET7A92jERgEtUCvAQepI", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 7:00 AM – 8:30 PM" },
+  { name:"The Tree Cafe", category:"Cafe", cuisine:"Cafe • Pasta & waffles", address:"7 Pasir Ris Central, B2-35, Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$$", rating:4.8, ratingCount:523, ratingSource:"Google", description:"A relaxed all-day cafe inside Pasir Ris Mall known for pasta, waffles and specialty coffee.", image:"☕", googleMapsPlaceId:"ChIJtVsCHwA92jERKRNOaGUEgDA", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Fri 11:30 AM–9:30 PM, Sat–Sun 11:00 AM–10:00 PM" },
+  { name:"Oak & Ember Singapore", category:"Western", cuisine:"Western • BBQ smokehouse", address:"25 Loyang Cres, Level 9, Block 103A, Singapore 508988", latitude:1.3811634, longitude:103.9696990, budget:"$$", rating:4.8, ratingCount:842, ratingSource:"Google", description:"A smokehouse-style restaurant specialising in slow-smoked barbecue platters and hearty sharing sides.", image:"🍖", googleMapsPlaceId:"ChIJM7hQxp892jERnThCQRx-Qr4", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 11:00 AM – 9:00 PM" },
+  { name:"Ohana Beach House (Pasir Ris)", category:"Western", cuisine:"Western • Beachfront bar & grill", address:"159W Jln. Loyang Besar, Singapore 507020", latitude:1.3809612, longitude:103.9615431, budget:"$$", rating:4.2, ratingCount:381, ratingSource:"Google", description:"A beachfront bar and grill right by Pasir Ris Park, with live music evenings and casual grilled fare.", image:"🏖️", googleMapsPlaceId:"ChIJtQzPwsY92jER1He2P4BPUNI", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon, Sat–Sun 9:00 AM–12:00 AM; Tue–Fri 3:00 PM–12:00 AM" },
+  { name:"Yuen Kee Dumpling Pasir Ris", category:"Chinese", cuisine:"Chinese • Dumplings & noodles", address:"7 Pasir Ris Central, #01-14 Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$$", rating:4.3, ratingCount:109, ratingSource:"Google", description:"A no-frills dumpling and noodle stall serving handmade pork and shrimp dumplings.", image:"🥟", googleMapsPlaceId:"ChIJJ6MHJAA92jER901GoErH634", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 9:30 AM – 9:30 PM" },
+  { name:"YAYOI Japanese Restaurant", category:"Japanese", cuisine:"Japanese • Teishoku sets", address:"7 Pasir Ris Central, #02-63 Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$$", rating:4.6, ratingCount:516, ratingSource:"Google", description:"A Japanese family restaurant chain offering teishoku set meals with free-flow rice, miso and salad.", image:"🍱", googleMapsPlaceId:"ChIJ9yfXJQA92jEREuDv6wMAkeg", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 10:30 AM – 9:00 PM" },
+  { name:"Genki Sushi Pasir Ris Mall", category:"Japanese", cuisine:"Japanese • Sushi train", address:"7 Pasir Ris Central, B1-33, Singapore 519612", latitude:1.373669, longitude:103.9483973, budget:"$$", rating:4.7, ratingCount:2052, ratingSource:"Google", description:"A sushi-train restaurant where plates circulate past your seat, popular for casual Japanese dining.", image:"🍣", googleMapsPlaceId:"ChIJYdbAUgA92jERKTPwVdGS0r0", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Thu 11:00 AM–9:00 PM, Fri–Sun 11:00 AM–10:00 PM" },
+  { name:"Yakiniku Shokudo Downtown East", category:"Japanese", cuisine:"Japanese • Yakiniku & teppanyaki", address:"1 Pasir Ris Cl, #02-318, Singapore 519599", latitude:1.376875, longitude:103.9550178, budget:"$$", rating:4.6, ratingCount:219, ratingSource:"Google", description:"A cosy yakiniku and teppanyaki spot with grill-your-own set meals.", image:"🍢", googleMapsPlaceId:"ChIJCdUGUgA92jERQsnPE2Z95A8", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 11:30 AM – 9:30 PM" },
+  { name:"Yakiniku Shiok!", category:"Japanese", cuisine:"Japanese • Yakiniku buffet", address:"1 Pasir Ris Cl, #02-347/348 E!Avenue @ Downtown East, Singapore 519599", latitude:1.3781091, longitude:103.9553427, budget:"$$", rating:4.8, ratingCount:132, ratingSource:"Google", description:"A buffet-style yakiniku restaurant with a wide range of meats to grill tableside.", image:"🔥", googleMapsPlaceId:"ChIJ4_GlaZs92jERFw-hY4IGnv8", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Fri 11:30 AM–2:30 PM & 5:30–10:00 PM, Sat–Sun 11:30 AM–10:00 PM" },
+  { name:"Xiang Xiang Hunan Cuisine", category:"Chinese", cuisine:"Chinese • Hunan claypot", address:"7 Pasir Ris Central, #02-60, Pasir Ris Mall, Singapore 519612", latitude:1.3740096, longitude:103.9485598, budget:"$$", rating:4.8, ratingCount:2244, ratingSource:"Google", description:"A Hunan-style Chinese restaurant known for spicy claypot and stir-fried dishes.", image:"🌶️", googleMapsPlaceId:"ChIJOzJ6NgA92jERgcWTEfdAC7g", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 11:00 AM – 10:00 PM" },
+  { name:"Paradise Classic", category:"Chinese", cuisine:"Chinese • Cantonese comfort food", address:"7 Pasir Ris Central, B1-35, Pasir Ris Mall, Singapore 519612", latitude:1.37392, longitude:103.9486382, budget:"$$", rating:4.5, ratingCount:163, ratingSource:"Google", description:"A Cantonese-Chinese restaurant serving noodles, rice and comfort dishes, with weekday lunch deals.", image:"🍜", googleMapsPlaceId:"ChIJJWKsIwA92jERl1BFihFl6bQ", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Fri 11:00 AM–10:00 PM, Sat–Sun 10:30 AM–10:00 PM" },
+  { name:"Dabba White Sands", category:"Indian", cuisine:"Indian • Build-your-own rice bowls", address:"1 Pasir Ris Central St 3, B1-K02 White Sands, Singapore 518457", latitude:1.3724798, longitude:103.9498469, budget:"$", rating:4.6, ratingCount:657, ratingSource:"Google", description:"A build-your-own rice bowl counter with Indian-inspired curries and toppings.", image:"🍛", googleMapsPlaceId:"ChIJk5pmt7492jERtyNEcYBAtic", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 10:30 AM – 9:30 PM" },
+  { name:"Springleaf Prata Place", category:"Indian", cuisine:"Indian-Muslim • Prata & biryani", address:"1 E!Avenue @ Downtown East, Pasir Ris Cl, #01-340, Singapore 519599", latitude:1.3772515, longitude:103.9549186, budget:"$", rating:4.6, ratingCount:1300, ratingSource:"Google", description:"A long-running prata and Indian-Muslim food chain known for crispy prata and biryani.", image:"🫓", googleMapsPlaceId:"ChIJkaSGqWs92jERQFg6iejKLls", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Sun–Thu 8:00 AM–10:00 PM, Fri–Sat 8:00 AM–2:00 AM" },
+  { name:"Warong Satay Abang Botak", category:"Malay", cuisine:"Malay-Indonesian • Charcoal satay", address:"94 Pasir Ris Central, Park, Singapore 519637", latitude:1.3726348, longitude:103.9517631, budget:"$$", rating:4.6, ratingCount:235, ratingSource:"Google", description:"An open-air Indonesian-Malay grill by the fishing pond, famous for charcoal satay and grilled stingray.", image:"🍢", googleMapsPlaceId:"ChIJEVASIYk92jERmmaja63A3xY", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Closed Tue; otherwise roughly 9:00 AM–2:00 AM (split hours)" },
+  { name:"Al-Rahim Malay Delights", category:"Malay", cuisine:"Malay • Nasi lemak & mee soto", address:"110 Pasir Ris Central, #01-03, Singapore 519639", latitude:1.3735776, longitude:103.9514715, budget:"$", rating:4.3, ratingCount:13, ratingSource:"Google", description:"A hawker stall dishing out Malay favourites like mee soto, nasi lemak and nasi padang.", image:"🍚", googleMapsPlaceId:"ChIJP2X0MrM92jERkaO8Y1VgbGs", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily, roughly 11:30 AM – 7:45 PM" },
+  { name:"HAEDEUM CHARCOAL BBQ", category:"Korean", cuisine:"Korean • Charcoal BBQ", address:"1 Pasir Ris Cl, #01-302 E!Avenue, Singapore 519599", latitude:1.3757595, longitude:103.9548998, budget:"$$", rating:4.5, ratingCount:991, ratingSource:"Google", description:"A Korean charcoal barbecue restaurant with grill-side service and buffet options.", image:"🥩", googleMapsPlaceId:"ChIJix3npEI92jERcbHJQcxoy5I", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 11:30 AM – 12:00 AM" },
+  { name:"Mi Bibimbap", category:"Korean", cuisine:"Korean • Stone-pot bibimbap", address:"7 Pasir Ris Central, B1-39, Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$$", rating:4.4, ratingCount:123, ratingSource:"Google", description:"A budget-friendly Korean eatery with sizzling stone-pot bibimbap and free-flow rice.", image:"🍚", googleMapsPlaceId:"ChIJFQavaAA92jEREg02EIpCPvo", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 11:00 AM – 9:00 PM" },
+  { name:"smöoy", category:"Dessert", cuisine:"Dessert • Frozen yoghurt", address:"7 Pasir Ris Central, B1-K16, Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$", rating:4.9, ratingCount:270, ratingSource:"Google", description:"A self-serve frozen yoghurt bar with rotating flavours and toppings.", image:"🍦", googleMapsPlaceId:"ChIJAdcFlaY92jER45msDJ7-sHo", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily, roughly 11:15 AM/12:00 PM – 9:30 PM" },
+  { name:"Batter & Brew", category:"Cafe", cuisine:"Cafe • Bakery & coffee", address:"Singapore 510418", latitude:1.371957, longitude:103.954139, budget:"$$", rating:5.0, ratingCount:5, ratingSource:"Google", description:"A small bakery-cafe baking cakes and muffins fresh daily, paired with brewed coffee.", image:"🧁", googleMapsPlaceId:"ChIJpfLPCuc92jERFzDWlEneZWE", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Fri 8:30 AM–9:00 PM, Sat–Sun 1:00–9:00 PM" },
+  { name:"Paris Baguette White Sands", category:"Cafe", cuisine:"Cafe • Bakery", address:"1 Pasir Ris Central St 3, #01-18/19/20 White Sands, Singapore 518457", latitude:1.3724166, longitude:103.9496584, budget:"$$", rating:4.6, ratingCount:564, ratingSource:"Google", description:"A Korean-style bakery-cafe with breads, pastries, cakes and coffee.", image:"🥐", googleMapsPlaceId:"ChIJwxzeRKQ92jERmb4MuH2-GPs", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 8:00 AM – 10:00 PM" },
+  { name:"DIVINE BITES", category:"Dessert", cuisine:"Bakery • Muffins & cakes", address:"110 Pasir Ris Central, #02-16, Singapore 519641", latitude:1.3734542, longitude:103.9516557, budget:"$", rating:4.8, ratingCount:46, ratingSource:"Google", description:"A hawker-centre bakery stall known for its muffins and cakes.", image:"🍰", googleMapsPlaceId:"ChIJ01DUM5A92jERzTMaNZKR_rg", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Tue–Sun 11:00 AM – 8:00 PM, closed Mon" },
+  { name:"Uncle Wong Western Food", category:"Western", cuisine:"Hawker Western • Chicken chop & pasta", address:"110 Pasir Ris Central, #02-13, Singapore 519641", latitude:1.3734146, longitude:103.9515826, budget:"$", rating:4.7, ratingCount:103, ratingSource:"Google", description:"A hawker-style Western food stall serving chicken chops and pasta at hawker prices.", image:"🍗", googleMapsPlaceId:"ChIJST8ViaU92jER3jduet8wi_c", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Thu–Sat 12:00 – 8:00 PM, closed Sun–Wed" },
+  { name:"Wild Olives", category:"Western", cuisine:"Hawker Western • Grilled mains", address:"110 Pasir Ris Central, #02-19, Singapore 519641", latitude:1.373547, longitude:103.9516835, budget:"$", rating:4.3, ratingCount:888, ratingSource:"Google", description:"A hawker Western food stall known for grilled chicken and seafood mains.", image:"🍽️", googleMapsPlaceId:"ChIJ_8kIMrA92jER1_ShHUa409c", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Wed–Sun 12:00–3:00 PM & 5:00–9:00 PM, closed Mon–Tue" },
+  { name:"Burger King (Pasir Ris East CC)", category:"Fast Food", cuisine:"Fast food • Burgers", address:"1 Pasir Ris Drive 4, #01-07 East Community Club, Singapore 519457", latitude:1.3683953, longitude:103.9594224, budget:"$", rating:4.8, ratingCount:684, ratingSource:"Google", description:"A 24-hour fast-food outlet serving flame-grilled burgers and breakfast items.", image:"🍔", googleMapsPlaceId:"ChIJ8YqGBwA92jER9yoKNDGwjt4", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Open 24 hours" },
+  { name:"Earle Swensen's", category:"Western", cuisine:"Western • Steaks, burgers & ice cream", address:"7 Pasir Ris Central, #02-16, Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$$", rating:4.8, ratingCount:3709, ratingSource:"Google", description:"An American-style family restaurant known for steaks, burgers and ice cream sundaes.", image:"🍨", googleMapsPlaceId:"ChIJGdcxv5w92jERPyeK6vpBBzU", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 11:00 AM – 10:30 PM" },
+  { name:"Jollibee (Pasir Ris Mall)", category:"Fast Food", cuisine:"Filipino fast food • Fried chicken", address:"7 Pasir Ris Central, B2-27, Singapore 519612", latitude:1.3736981, longitude:103.9484888, budget:"$", rating:4.5, ratingCount:863, ratingSource:"Google", description:"A Filipino fast-food chain famous for fried chicken and spaghetti.", image:"🍗", googleMapsPlaceId:"ChIJW57kIQA92jERVhXfSkHUCzo", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Thu 9:30 AM–9:00 PM, Fri–Sun 9:30 AM–9:30 PM" },
+  { name:"Guzman y Gomez", category:"Fast Food", cuisine:"Mexican • Burritos & tacos", address:"7 Pasir Ris Central, #01-13, Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$$", rating:4.9, ratingCount:2126, ratingSource:"Google", description:"A fast-casual Mexican restaurant serving burritos, tacos and nachos made to order.", image:"🌯", googleMapsPlaceId:"ChIJz-a7YgA92jERIqHu3PJceZo", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Thu & Sun 10:30 AM–10:30 PM, Fri–Sat 10:30 AM–12:00 AM" },
+  { name:"At Tea", category:"Drinks", cuisine:"Drinks • Bubble tea", address:"7 Pasir Ris Central, #01-30, Pasir Ris Mall, Singapore 519612", latitude:1.3733053, longitude:103.9489296, budget:"$", rating:4.4, ratingCount:62, ratingSource:"Google", description:"A bubble tea stall with a wide range of milk tea and fruit tea blends.", image:"🧋", googleMapsPlaceId:"ChIJ5YhwYAA92jERgg_0RNuGCZo", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Thu 11:00 AM–9:30 PM, Fri–Sun 11:00 AM–10:00 PM" },
+  { name:"Hello! Brew Bar", category:"Drinks", cuisine:"Drinks • Bubble tea & coffee", address:"Blk 443 Pasir Ris Drive 6, #01-14, Singapore 510443", latitude:1.3692688, longitude:103.9573084, budget:"$", rating:4.1, ratingCount:40, ratingSource:"Google", description:"A neighbourhood drinks stall serving bubble tea and coffee-based drinks.", image:"🧋", googleMapsPlaceId:"ChIJOeVABQA92jEReePuGJXbJ40", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Fri 8:45 AM–9:45 PM, Sat–Sun 8:15 AM–9:45 PM" },
+  { name:"itea (Pasir Ris MRT)", category:"Drinks", cuisine:"Drinks • Bubble tea", address:"10 Pasir Ris Central, #01-04, Singapore 519634", latitude:1.3731143, longitude:103.9493411, budget:"$", rating:4.5, ratingCount:257, ratingSource:"Google", description:"A bubble tea outlet near Pasir Ris MRT with classic and fruit tea options.", image:"🧋", googleMapsPlaceId:"ChIJR-dqAmo92jERtAaGMxgQ6gQ", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Mon–Fri 11:00 AM–9:45 PM, Sat–Sun 10:30 AM–9:45 PM" },
+  { name:"ChaPanda", category:"Drinks", cuisine:"Drinks • Bubble tea", address:"Pasir Ris Central, 7 Mall, B2-11/12, Singapore 519612", latitude:1.3727050, longitude:103.9485188, budget:"$", rating:3.5, ratingCount:18, ratingSource:"Google", description:"A bubble tea stall offering milk teas and fruit blends.", image:"🧋", googleMapsPlaceId:"ChIJvcwRGgA92jER2HVnSWL5mhA", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 10:00 AM – 9:00 PM" },
+  { name:"McDonald's (Pasir Ris Mall)", category:"Fast Food", cuisine:"Fast food • Burgers", address:"7 Pasir Ris Central, B1-41, Singapore 519612", latitude:1.3726984, longitude:103.9485307, budget:"$", rating:2.9, ratingCount:80, ratingSource:"Google", description:"A fast-food outlet serving the full McDonald's menu.", image:"🍟", googleMapsPlaceId:"ChIJo-IMRgA92jERsGyyFog1g_w", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 7:00 AM – 11:00 PM" },
+  { name:"McDonald's (White Sands)", category:"Fast Food", cuisine:"Fast food • Burgers & breakfast", address:"1 Pasir Ris Central St 3, #01-28/29, White Sands, Singapore 518457", latitude:1.3723635, longitude:103.9493638, budget:"$", rating:4.0, ratingCount:1067, ratingSource:"Google", description:"A late-hours McDonald's outlet with all-day breakfast and mobile ordering.", image:"🍟", googleMapsPlaceId:"ChIJay3_TKA92jERer0ra1IVE_c", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily roughly 6:00 AM – 12:00/1:00 AM" },
+  { name:"KFC (White Sands)", category:"Fast Food", cuisine:"Fast food • Fried chicken", address:"1 Pasir Ris Central St 3, #01-14/15 White Sands, Singapore 518457", latitude:1.3722454, longitude:103.9498662, budget:"$", rating:4.0, ratingCount:844, ratingSource:"Google", description:"A fried chicken fast-food outlet with combo meals and sides.", image:"🍗", googleMapsPlaceId:"ChIJByeM-6892jER4Tv-ZzZp8Es", grabFoodUrl:null, foodpandaUrl:null, openingHours:"Daily 7:00 AM – 10:00 PM" }
+];
+
+/* ============================================================
+   8. DISTANCE CALCULATION (Haversine)
+   ============================================================ */
+function calculateDistance(lat1, lng1, lat2, lng2){
+  const R = 6371000; // metres
+  const toRad = deg => deg * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat/2)**2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // metres
+}
+
+function formatDistance(metres){
+  if(metres < 1000) return Math.round(metres) + " m";
+  return (metres/1000).toFixed(1) + " km";
+}
+
+function budgetRank(b){ return b.length; } // "$" -> 1, "$$" -> 2 etc.
+
+function googleMapsUrl(r){
+  const q = encodeURIComponent(r.name + " " + r.address);
+  return `https://www.google.com/maps/search/?api=1&query=${q}&query_place_id=${r.googleMapsPlaceId}`;
+}
+
+// Precompute distances once
+restaurants.forEach(r => {
+  r.distanceMetres = calculateDistance(HOME.lat, HOME.lng, r.latitude, r.longitude);
+});
+
+/* ============================================================
+   State
+   ============================================================ */
+let state = {
+  search:"",
+  budget:"any",
+  distance:2000,
+  type:"any",
+  rating:0,
+  sort:"nearest",
+  quick:"all"
+};
+
+/* ============================================================
+   5/6. FILTERING
+   ============================================================ */
+function filterRestaurants(){
+  const term = state.search.trim().toLowerCase();
+  return restaurants.filter(r => {
+    if(term){
+      const haystack = (r.name + " " + r.cuisine + " " + r.category).toLowerCase();
+      if(!haystack.includes(term)) return false;
+    }
+    if(state.budget !== "any" && r.budget !== state.budget) return false;
+    if(r.distanceMetres > state.distance) return false;
+    if(state.type !== "any" && r.category !== state.type) return false;
+    if(r.rating !== null && r.rating < state.rating) return false;
+    if(state.rating > 0 && r.rating === null) return false;
+
+    // quick filters
+    if(state.quick === "under10" && !(r.budget === "$")) return false;
+    if(state.quick === "under20" && !(r.budget === "$" || r.budget === "$$")) return false;
+    if(state.quick === "highrated" && !(r.rating !== null && r.rating >= 4.5)) return false;
+    if(state.quick === "within1km" && r.distanceMetres > 1000) return false;
+
+    return true;
+  });
+}
+
+/* ============================================================
+   20. SORTING
+   ============================================================ */
+function sortRestaurants(list){
+  const sorted = [...list];
+  switch(state.sort){
+    case "nearest":
+      sorted.sort((a,b)=> a.distanceMetres - b.distanceMetres); break;
+    case "rating":
+      sorted.sort((a,b)=> (b.rating ?? -1) - (a.rating ?? -1)); break;
+    case "priceLow":
+      sorted.sort((a,b)=> budgetRank(a.budget) - budgetRank(b.budget)); break;
+    case "priceHigh":
+      sorted.sort((a,b)=> budgetRank(b.budget) - budgetRank(a.budget)); break;
+    case "az":
+      sorted.sort((a,b)=> a.name.localeCompare(b.name)); break;
+  }
+  return sorted;
+}
+
+/* ============================================================
+   7/17. RENDER CARDS
+   ============================================================ */
+function createRestaurantCard(r){
+  const ratingHtml = r.rating !== null
+    ? `<span class="r-rating">⭐ ${r.rating.toFixed(1)}${r.ratingCount ? " (" + r.ratingCount + ")" : ""}</span>`
+    : `<span class="r-rating unavailable">⭐ Rating unavailable</span>`;
+
+  const grabBtn = r.grabFoodUrl
+    ? `<a class="btn-action btn-grab" href="${r.grabFoodUrl}" target="_blank" rel="noopener">🟢 GrabFood</a>`
+    : `<span class="btn-action unavailable" title="GrabFood link unavailable">🟢 GrabFood link unavailable</span>`;
+
+  const pandaBtn = r.foodpandaUrl
+    ? `<a class="btn-action btn-panda" href="${r.foodpandaUrl}" target="_blank" rel="noopener">🩷 foodpanda</a>`
+    : `<span class="btn-action unavailable" title="foodpanda link unavailable">🩷 foodpanda link unavailable</span>`;
+
+  return `
+    <article class="r-card">
+      <div class="r-image" role="img" aria-label="${r.cuisine} food image placeholder for ${r.name}">
+        <span aria-hidden="true">${r.image}</span>
+        <span class="dist-pill">📍 ${formatDistance(r.distanceMetres)}</span>
+        <span class="budget-pill">${r.budget}</span>
+      </div>
+      <div class="r-body">
+        <h3 class="r-name">${r.name}</h3>
+        <p class="r-cuisine">${r.cuisine}</p>
+        <p class="r-address">${r.address}</p>
+        <p class="r-desc">${r.description}</p>
+        <div class="r-meta-row">
+          ${ratingHtml}
+        </div>
+        <p class="r-hours">🕒 ${r.openingHours}</p>
+      </div>
+      <div class="r-buttons">
+        <a class="btn-action btn-map" href="${googleMapsUrl(r)}" target="_blank" rel="noopener">🗺️ Map</a>
+        <div class="row-two">
+          ${grabBtn}
+          ${pandaBtn}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderRestaurants(){
+  const filtered = filterRestaurants();
+  const sorted = sortRestaurants(filtered);
+  const grid = document.getElementById("cardGrid");
+  const empty = document.getElementById("emptyState");
+  const counter = document.getElementById("resultCounter");
+
+  counter.textContent = `Showing ${sorted.length} food place${sorted.length === 1 ? "" : "s"}`;
+
+  if(sorted.length === 0){
+    grid.style.display = "none";
+    empty.style.display = "block";
+  } else {
+    grid.style.display = "grid";
+    empty.style.display = "none";
+    grid.innerHTML = sorted.map(createRestaurantCard).join("");
+  }
+
+  updateStatistics();
+}
+
+/* ============================================================
+   19. STATISTICS
+   ============================================================ */
+function updateStatistics(){
+  document.getElementById("statTotal").textContent = restaurants.length;
+  document.getElementById("statWithin1km").textContent = restaurants.filter(r => r.distanceMetres <= 1000).length;
+  document.getElementById("statWithin2km").textContent = restaurants.filter(r => r.distanceMetres <= 2000).length;
+  const rated = restaurants.filter(r => r.rating !== null);
+  const avg = rated.length ? (rated.reduce((s,r)=>s+r.rating,0) / rated.length) : 0;
+  document.getElementById("statAvgRating").textContent = avg.toFixed(1);
+}
+
+/* ============================================================
+   9/21. MAP LINK
+   ============================================================ */
+document.getElementById("openMapsBtn").href =
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(HOME.label)}`;
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+document.getElementById("searchInput").addEventListener("input", e => {
+  state.search = e.target.value;
+  renderRestaurants();
+});
+
+document.getElementById("budgetFilter").addEventListener("change", e => {
+  state.budget = e.target.value; renderRestaurants();
+});
+document.getElementById("distanceFilter").addEventListener("change", e => {
+  state.distance = Number(e.target.value); renderRestaurants();
+});
+document.getElementById("typeFilter").addEventListener("change", e => {
+  state.type = e.target.value; renderRestaurants();
+});
+document.getElementById("ratingFilter").addEventListener("change", e => {
+  state.rating = Number(e.target.value); renderRestaurants();
+});
+document.getElementById("sortSelect").addEventListener("change", e => {
+  state.sort = e.target.value; renderRestaurants();
+});
+
+function resetFilters(){
+  state = { search:"", budget:"any", distance:2000, type:"any", rating:0, sort:"nearest", quick:"all" };
+  document.getElementById("searchInput").value = "";
+  document.getElementById("budgetFilter").value = "any";
+  document.getElementById("distanceFilter").value = "2000";
+  document.getElementById("typeFilter").value = "any";
+  document.getElementById("ratingFilter").value = "0";
+  document.getElementById("sortSelect").value = "nearest";
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  document.querySelector('.chip[data-quick="all"]').classList.add("active");
+  renderRestaurants();
+}
+document.getElementById("resetBtn").addEventListener("click", resetFilters);
+document.getElementById("resetBtn2").addEventListener("click", resetFilters);
+
+document.getElementById("quickFilters").addEventListener("click", e => {
+  const btn = e.target.closest(".chip");
+  if(!btn || btn.disabled) return;
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  btn.classList.add("active");
+  state.quick = btn.dataset.quick;
+  renderRestaurants();
+});
+
+/* Initial render */
+renderRestaurants();
+</script>
+</body>
+</html>
